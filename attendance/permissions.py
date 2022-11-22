@@ -7,11 +7,11 @@ from rest_framework import permissions, request
 #             return True
 #         return obj.Student == request.user
 
-class IsLecturer(permissions.BasePermission):
-    message = "You are not a Lecturer"
+class IsAdmin(permissions.BasePermission):
+    message = "You are not an Admin"
 
     def has_permission(self, request, view):
         user_groups = request.user.groups.values_list("name", flat=True)
-        if "Lecturer" in user_groups:
+        if "Admin" in user_groups:
             return True
         return False
