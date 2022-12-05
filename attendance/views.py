@@ -1,9 +1,10 @@
+from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework import status, viewsets, permissions
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, DjangoModelPermissionsOrAnonReadOnly, \
     DjangoModelPermissions
 from rest_framework.response import Response
@@ -98,8 +99,8 @@ def course_detail(request, pk):
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    #authentication_classes = (TokenAuthentication,)
-    permission_classes = [ DjangoModelPermissions, ]
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = [DjangoModelPermissions, ]
 
 
 # Semester
@@ -143,7 +144,7 @@ class SemesterViewSet(viewsets.ModelViewSet):
     queryset = Semester.objects.all()
     serializer_class = SemesterSerializer
     # authentication_classes = (TokenAuthentication,)
-    permission_classes = [DjangoModelPermissions, ]
+    # permission_classes = [DjangoModelPermissions, ]
 
 
 # Lecturer
@@ -187,7 +188,7 @@ class LecturerViewSet(viewsets.ModelViewSet):
     queryset = Lecturer.objects.all()
     serializer_class = LecturerSerializer
     # authentication_classes = (TokenAuthentication,)
-    permission_classes = [DjangoModelPermissions, ]
+    # permission_classes = [DjangoModelPermissions, ]
 
 
 # Student
@@ -231,7 +232,7 @@ class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     # authentication_classes = (TokenAuthentication,)
-    permission_classes = [DjangoModelPermissions, ]
+    # permission_classes = [DjangoModelPermissions, ]
 
 
 # Class
@@ -275,7 +276,7 @@ class ClassesViewSet(viewsets.ModelViewSet):
     queryset = Classes.objects.all()
     serializer_class = ClassesSerializer
     # authentication_classes = (TokenAuthentication,)
-    permission_classes = [DjangoModelPermissions, ]
+    # permission_classes = [DjangoModelPermissions, ]
 
 
 # College Day
@@ -319,7 +320,7 @@ class CollegeDayViewSet(viewsets.ModelViewSet):
     queryset = CollegeDay.objects.all()
     serializer_class = CollegeDaySerializer
     # authentication_classes = (TokenAuthentication,)
-    permission_classes = [DjangoModelPermissions, ]
+    # permission_classes = [DjangoModelPermissions, ]
 
 
 @api_view(["GET", "POST"])
@@ -340,4 +341,20 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     # authentication_classes = (TokenAuthentication,)
-    permission_classes = [DjangoModelPermissions, ]
+    # permission_classes = [DjangoModelPermissions, ]
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication])
+def User_logout(request):
+    request.user.auth_token.delete()
+    logout(request)
+    return Response('User Logged out successfully')
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication])
+def User_ID_Search(request):
+    return Response({"userid": request.user.id})

@@ -3,7 +3,7 @@ from django.urls import path
 
 from attendance.views import CourseViewSet, SemesterViewSet, LecturerViewSet, StudentViewSet, ClassesViewSet, \
     CollegeDayViewSet, index, course, course_detail, semester, semester_detail, lecturer, lecturer_detail, \
-    student, student_detail, classes, classes_detail, collegeday, collegeday_detail, UserViewSet, users
+    student, student_detail, classes, classes_detail, collegeday, collegeday_detail, UserViewSet, users, User_ID_Search
 
 router = DefaultRouter()
 router.register('course_viewset', CourseViewSet, 'course_model_viewset')
@@ -36,4 +36,6 @@ urlpatterns.append(path('classes/<int:pk>', classes_detail)),
 
 urlpatterns.append(path('collegeday/', collegeday)),
 urlpatterns.append(path('collegeday/<int:pk>', collegeday_detail)),
+
+urlpatterns.append(path('user_id_search/', User_ID_Search)),
 
